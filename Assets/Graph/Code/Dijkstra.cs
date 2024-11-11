@@ -8,6 +8,12 @@ namespace Charly.Graph
     {
         #region References
 
+        //both will be obtained by calculating the leeser distance between:
+            //Avatar VS all nodes
+            //Goal VS all nodes
+        [SerializeField] protected Node initialNode;
+        [SerializeField] protected Node finalNode;
+
         //The collection of all the nodes
         //Wich every node contains multiple connection
         //defines the graph 
