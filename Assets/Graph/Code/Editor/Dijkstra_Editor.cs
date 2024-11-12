@@ -26,7 +26,7 @@ namespace Charly.Graph
 
             if (GUILayout.Button("1) Probe Nodes"))
             {
-
+                _dijkstra.CreatNodes();
             }
             if (GUILayout.Button("2) Creat Graph (by connecting the nodes)"))
             {
@@ -47,5 +47,16 @@ namespace Charly.Graph
         }
 
         #endregion
+
+        public Dijkstra SetDijkstra
+        {
+            set { _dijkstra = value; }
+        }
+
+        public Dijkstra GetDijkstra
+        {
+            get { return _dijkstra; }
+        }
+
     }
 }
