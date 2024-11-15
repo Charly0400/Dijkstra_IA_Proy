@@ -26,11 +26,11 @@ namespace Charly.Graph
 
             if (GUILayout.Button("1) Probe Nodes"))
             {
-                _dijkstra.CreatNodes();
+                _dijkstra.ProbeNodes();
             }
             if (GUILayout.Button("2) Creat Graph (by connecting the nodes)"))
             {
-
+                _dijkstra.CalculateAllRoutes();
             }
             if (GUILayout.Button("3) Calculate all routes (and the best route to destiny"))
             {

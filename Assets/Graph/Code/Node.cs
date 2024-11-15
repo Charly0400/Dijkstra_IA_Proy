@@ -24,5 +24,14 @@ namespace Charly.Graph
         }
 
         #endregion
+
+        #region SetterAndGetters
+
+        public List<Connection> GetConnections
+        {
+            get { return connections; }
+        }
+
+        #endregion
     }
 }

@@ -9,8 +9,10 @@ namespace Charly.Graph
     {
         #region RuntimeVariables
 
-        [SerializeField] protected int SizeX = 10;
-        [SerializeField] protected int SizeZ = 10;
+        [SerializeField] protected int sizeX = 10;
+        [SerializeField] protected int sizeZ = 10;
+        [SerializeField] float cellSize = 1.0f;
+        [SerializeField] protected GameObject prefabNodeTest;
 
         #endregion
 
@@ -29,28 +31,112 @@ namespace Charly.Graph
 
         #endregion
 
+        #region RuntimeVariables
+
+        protected Route initialRoute;
+        protected List<Route> allRoutes;
+            //succesfullRoutes
+            //truncatedRoutes
+            //failledRoutes
+
+        #endregion
+
+        #region GUILayoutButton
+
+        public void CalculateAllRoutes()
+        {
+            initialRoute = new Route();
+            initialRoute.AddNode(initialNode, 0);
+
+            allRoutes = new List<Route>();
+            allRoutes.Add(initialRoute);
+            //Recursive Method
+            ExploreBranchTree(initialRoute, initialNode);
+        }
+
+        #endregion
+
+        #region LocalMethods
+
+        //Recursive Method
+        protected void ExploreBranchTree(Route previousRoute, Node actualNodeToExplore)
+        {
+            //Are we in the destiny node
+            if (actualNodeToExplore == finalNode)
+            {
+                //Break point for recursivity at this level
+                return;
+            }
+            else
+            {
+                //validate the connections of the actual node
+                foreach (Connection connectionOfTheActualNode in actualNodeToExplore.GetConnections)
+                {
+                    Node nextNode = connectionOfTheActualNode.RetreiveOtherNodeThan(actualNodeToExplore);
+
+                    if (!previousRoute.ContainsNodeInRoute(nextNode))
+                    {
+                        //1) Furthe exploration in a branch of the tree
+                        //Invocation to itself
+                        Route newRoute = new Route(
+                            previousRoute.nodes,
+                            previousRoute.sumDistance
+                            );
+                        newRoute.AddNode(
+                            nextNode,
+                            connectionOfTheActualNode.ditanceBetweenNodes
+                            );
+                        allRoutes.Add(newRoute); //truncated route
+                                                 //Invocation to itself to continue recursivity
+                        ExploreBranchTree(newRoute, nextNode);
+                    }
+                    else
+                    {
+                        //2) Connection ti apreviously explored node in the route
+                        //Break point for recursivity
+                    }
+                }           
+            }
+            //Cut the recursivity
+        }
+
+        #endregion
+
         #region RuntimeMethods
 
-        public void CreatNodes()
+        public void ProbeNodes()
         {
-            for (int x = 0; x < SizeX; x++)
+            Vector3 startPosition = transform.position -
+                                new Vector3(sizeX * cellSize / 2, 0, sizeZ * cellSize / 2);
+
+            for (int x = 0; x < sizeX; x++)
             {
-                for (int z = 0; z < SizeZ; z++)
+                for (int z = 0; z < sizeZ; z++)
                 {
-                    Vector3 nodePosition = new Vector3(x * SizeX, 0, z * SizeZ);
+                    Vector3 nodePosition = startPosition + new Vector3(x * cellSize, 0, z * cellSize);
+
+                    CreateNode(nodePosition);
                 }
             }
 
         }
 
+        void CreateNode(Vector3 position)
+        {
+            if (prefabNodeTest != null)
+            {
+                Instantiate(prefabNodeTest, position, Quaternion.identity);
+            }
+        }
+
         #endregion
 
-        #region UnityMethodas
+        #region UnityMethods
 
         private void OnDrawGizmos()
         {
-        
-
+            
+            
         }
 
         #endregion
