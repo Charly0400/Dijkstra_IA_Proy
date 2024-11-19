@@ -92,7 +92,7 @@ namespace Charly.Graph
                     }
                     else
                     {
-                        //2) Connection ti apreviously explored node in the route
+                        //2) Connection to a previously explored node in the route
                         //Break point for recursivity
                     }
                 }           
@@ -107,7 +107,7 @@ namespace Charly.Graph
         public void ProbeNodes()
         {
             Vector3 startPosition = transform.position -
-                                new Vector3(sizeX * cellSize / 2, 0, sizeZ * cellSize / 2);
+                                new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);
 
             for (int x = 0; x < sizeX; x++)
             {
@@ -135,8 +135,26 @@ namespace Charly.Graph
 
         private void OnDrawGizmos()
         {
-            
-            
+            Gizmos.color = Color.blue;
+
+            Vector3 startPosition = transform.position -    
+                                    new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);
+
+            // Dibujar líneas horizontales
+            for (int x = 0; x < sizeX; x++)
+            {
+                Vector3 start = startPosition + new Vector3(x * cellSize, 0, 0);
+                Vector3 end = start + new Vector3(0, 0, sizeZ * cellSize);
+                Gizmos.DrawLine(start, end);
+            }
+
+            // Dibujar líneas verticales
+            for (int z = 0; z < sizeZ; z++)
+            {
+                Vector3 start = startPosition + new Vector3(0, 0, z * cellSize);
+                Vector3 end = start + new Vector3(sizeX * cellSize + 1, 0, 0);
+                Gizmos.DrawLine(start, end);
+            }
         }
 
         #endregion
