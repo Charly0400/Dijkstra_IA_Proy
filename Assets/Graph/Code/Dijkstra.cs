@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Charly.Graph
 {
@@ -114,18 +115,18 @@ namespace Charly.Graph
                 for (int z = 0; z < sizeZ; z++)
                 {
                     Vector3 nodePosition = startPosition + new Vector3(x * cellSize, 0, z * cellSize);
-
-                    CreateNode(nodePosition);
+                    GameObject nodesToList =  Instantiate(prefabNodeTest, nodePosition, Quaternion.identity);
+                    graph.Add(nodesToList.GetComponent<Node>());
                 }
             }
 
         }
 
-        void CreateNode(Vector3 position)
+        public void ConnectionNodes()
         {
-            if (prefabNodeTest != null)
+            foreach (Node node in graph)
             {
-                Instantiate(prefabNodeTest, position, Quaternion.identity);
+                node.RayCastForAllNodes();
             }
         }
 
@@ -140,7 +141,6 @@ namespace Charly.Graph
             Vector3 startPosition = transform.position -    
                                     new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);
 
-            // Dibujar líneas horizontales
             for (int x = 0; x < sizeX; x++)
             {
                 Vector3 start = startPosition + new Vector3(x * cellSize, 0, 0);
@@ -148,7 +148,6 @@ namespace Charly.Graph
                 Gizmos.DrawLine(start, end);
             }
 
-            // Dibujar líneas verticales
             for (int z = 0; z < sizeZ; z++)
             {
                 Vector3 start = startPosition + new Vector3(0, 0, z * cellSize);
@@ -156,6 +155,16 @@ namespace Charly.Graph
                 Gizmos.DrawLine(start, end);
             }
         }
+
+        #endregion
+
+        #region GetterSetters
+
+        public List<Node> GetListOfNodes 
+        {
+            get { return graph; }
+        }
+        //getter of the list
 
         #endregion
     }
