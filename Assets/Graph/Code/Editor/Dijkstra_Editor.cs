@@ -42,7 +42,7 @@ namespace Charly.Graph
             }
             if (GUILayout.Button("Clean all previuos calculations"))
             {
-
+                _dijkstra.ClearAll();
             }
         }
 

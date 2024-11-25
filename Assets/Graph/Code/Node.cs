@@ -7,7 +7,7 @@ namespace Charly.Graph
 {
     public class Node : MonoBehaviour
     {
-        #region
+        #region Refeerences
 
         //Saves up to 0 to any connection
         [SerializeField] protected List<Connection> connections;
@@ -15,7 +15,12 @@ namespace Charly.Graph
 
         #endregion
 
+        #region Variables
+
         [SerializeField] private int nodesSeen;
+        protected bool isNodeConnectacle;
+
+        #endregion
 
         #region UnityMethods
 
@@ -36,11 +41,16 @@ namespace Charly.Graph
                 Debug.DrawLine(
                         connection.nodeA.transform.position,
                         connection.nodeB.transform.position,
-                        Color.white,
+                        Color.gray,
                         0.01666666f
                     );
             }
         }
+
+        #endregion
+
+
+        #region PublicMethods
 
         public void RayCastForAllNodes()
         {
@@ -52,7 +62,7 @@ namespace Charly.Graph
                 Vector3 direction = node.gameObject.transform.position - transform.position;
                 if (Physics.Raycast(transform.position, direction, out hit, 10))
                 {
-                    if (hit.collider.gameObject.CompareTag("Node"))
+                    if (hit.collider.gameObject.CompareTag("Node") /*&& isNodeConnectacle==true*/)
                     {
                         connections.Add(new Connection());
                         connections[nodesSeen].nodeA = gameObject.GetComponent<Node>();
@@ -62,6 +72,12 @@ namespace Charly.Graph
                 }
             }
         }
+
+        #endregion
+
+        #region privateMethods
+
+        
 
         #endregion
 
