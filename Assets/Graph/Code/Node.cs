@@ -15,7 +15,7 @@ namespace Charly.Graph
 
         #endregion
 
-        [SerializeField] private int nodesFound;
+        [SerializeField] private int nodesSeen;
 
         #region UnityMethods
 
@@ -44,7 +44,7 @@ namespace Charly.Graph
 
         public void RayCastForAllNodes()
         {
-            nodesFound = 0;
+            nodesSeen = 0;
             _dijkstra = GameObject.Find("Dijkstra(Graph)").GetComponent<Dijkstra>();
             foreach (Node node in _dijkstra.GetListOfNodes)        
             {
@@ -55,9 +55,9 @@ namespace Charly.Graph
                     if (hit.collider.gameObject.CompareTag("Node"))
                     {
                         connections.Add(new Connection());
-                        connections[nodesFound].nodeA = gameObject.GetComponent<Node>();
-                        connections[nodesFound].nodeB = hit.collider.gameObject.GetComponent<Node>();
-                        ++nodesFound;
+                        connections[nodesSeen].nodeA = gameObject.GetComponent<Node>();
+                        connections[nodesSeen].nodeB = hit.collider.gameObject.GetComponent<Node>();
+                        ++nodesSeen;
                     }
                 }
             }

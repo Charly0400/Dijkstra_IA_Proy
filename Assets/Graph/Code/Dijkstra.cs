@@ -14,6 +14,7 @@ namespace Charly.Graph
         [SerializeField] protected int sizeZ = 10;
         [SerializeField] float cellSize = 1.0f;
         [SerializeField] protected GameObject prefabNodeTest;
+        protected GameObject nodesContainer;
 
         #endregion
 
@@ -107,6 +108,12 @@ namespace Charly.Graph
 
         public void ProbeNodes()
         {
+            if (nodesContainer == null)
+            {
+                nodesContainer = new GameObject("NodesContainer");
+                nodesContainer.transform.SetParent(this.transform);
+            }
+
             Vector3 startPosition = transform.position -
                                 new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);
 
@@ -115,11 +122,11 @@ namespace Charly.Graph
                 for (int z = 0; z < sizeZ; z++)
                 {
                     Vector3 nodePosition = startPosition + new Vector3(x * cellSize, 0, z * cellSize);
-                    GameObject nodesToList =  Instantiate(prefabNodeTest, nodePosition, Quaternion.identity);
-                    graph.Add(nodesToList.GetComponent<Node>());
+                    GameObject nodesInstance =  Instantiate(prefabNodeTest, nodePosition, Quaternion.identity);
+                    nodesInstance.transform.SetParent(nodesContainer.transform);
+                    graph.Add(nodesInstance.GetComponent<Node>());
                 }
             }
-
         }
 
         public void ConnectionNodes()
