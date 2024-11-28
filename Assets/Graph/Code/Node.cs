@@ -8,24 +8,29 @@ namespace Charly.Graph
 {
     public class Node : MonoBehaviour
     {
+        #region Directions
+
+        protected Vector3[] listaDeDirecciones = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left, 
+            new Vector3(.5f, 0,.5f), new Vector3(-.5f, 0, -.5f), new Vector3(-.5f, 0, .5f), new Vector3(.5f, 0, -.5f)};
+
+        #endregion
+
         #region Refeerences
 
         //Saves up to 0 to any connection
         [SerializeField] protected List<Connection> connections;
-        [SerializeField] protected Dijkstra _dijkstra;
+        protected Dijkstra _dijkstra;
 
         #endregion
 
         #region Variables
 
-        [SerializeField] private int nodesSeen;
-        [SerializeField] public bool isNodeInstanciable = true;
+        [SerializeField] public bool isNodeConnectable = true;
 
         [SerializeField] protected Material defaultNodeMaterial;
         [SerializeField] protected Material invalidNodeMaterial;
 
         [SerializeField, HideInInspector] protected MeshRenderer _meshRenderer;
-        protected Vector3[] listaDeDirecciones = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
 
         #endregion
 
@@ -38,7 +43,6 @@ namespace Charly.Graph
 
         private void OnDrawGizmos()
         {
-
             if (connections == null)
                 return;
             foreach (Connection connection in connections)
@@ -58,41 +62,27 @@ namespace Charly.Graph
 
         #region PublicMethods
 
-        public void RayCastForAllNodes()
+        public void RayCastAndDistanceForAllNodes()
         {
             RaycastHit hit;
             Vector3 direction = new Vector3();
            
             for (int i = 0; i < listaDeDirecciones.Length; i++) {
                 direction = listaDeDirecciones[i];
-                if (Physics.Raycast(this.transform.position, direction, out hit, 10)) {
-                    Debug.Log(this + " " +  this.transform.gameObject.name);
-                    if (hit.collider.gameObject.CompareTag("Node") & hit.transform.gameObject.GetComponent<Node>().isNodeInstanciable == true) {
-                        Connection newConecction = new Connection();
-                        newConecction.nodeA = hit.transform.gameObject.GetComponent<Node>();
-                        newConecction.nodeB = this;
-                        //connections[nodesSeen].nodeA = gameObject.GetComponent<Node>();
-                        //connections[nodesSeen].nodeB = hit.collider.gameObject.GetComponent<Node>();
-                        //++nodesSeen;
+                if (Physics.Raycast(transform.position, direction, out hit, 100)) 
+                {
+                    if (hit.collider.gameObject.CompareTag("Node") &&
+                        hit.transform.gameObject.GetComponent<Node>().isNodeConnectable == true) 
+                    {
+                        Connection newConecction = new Connection();  
+                        connections.Add(newConecction);
+                        newConecction.nodeA = this;
+                        newConecction.nodeB = hit.transform.gameObject.GetComponent<Node>();
+                        newConecction.ditanceBetweenNodes =
+                            Vector3.Distance(this.transform.position, hit.transform.position);
                     }
                 }
             }
-            //foreach (Node node in _dijkstra.GetListOfNodes)        
-            //{
-            //    RaycastHit hit;
-            //    Vector3 direction = node.gameObject.transform.position - transform.position;
-            //    if (Physics.Raycast(transform.position, direction, out hit, 10))
-            //    {
-            //        Debug.Log(hit.transform.gameObject.GetComponent<Node>().isNodeInstanciable + hit.transform.gameObject.name);
-            //        if (hit.collider.gameObject.CompareTag("Node") & isNodeInstanciable == true)
-            //        {
-            //            connections.Add(new Connection());
-            //            connections[nodesSeen].nodeA = gameObject.GetComponent<Node>();
-            //            connections[nodesSeen].nodeB = hit.collider.gameObject.GetComponent<Node>();
-            //            ++nodesSeen;
-            //        }
-            //    }
-            //}
         }
 
         public void ValidNode() 
@@ -102,7 +92,7 @@ namespace Charly.Graph
             {
                 if (collider.gameObject.CompareTag("Object")) 
                 {
-                    isNodeInstanciable = false;
+                    isNodeConnectable = false;
                     _meshRenderer = GetComponent<MeshRenderer>();
                     _meshRenderer.material = invalidNodeMaterial;
                 }

@@ -119,3 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connections: []
+  isNodeConnectable: 1
+  defaultNodeMaterial: {fileID: 2100000, guid: b1830234ffcd17049a5f3229694c92fe, type: 2}
+  invalidNodeMaterial: {fileID: 2100000, guid: ac08e9d02c675fe4d8f4c0295c3be668, type: 2}
+  _meshRenderer: {fileID: 0}

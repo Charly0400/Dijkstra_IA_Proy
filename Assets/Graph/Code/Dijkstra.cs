@@ -38,7 +38,7 @@ namespace Charly.Graph
         #region RuntimeVariables
 
         protected Route initialRoute;
-        protected List<Route> allRoutes;
+        [SerializeField] protected List<Route> allRoutes;
             //succesfullRoutes
             //truncatedRoutes
             //failledRoutes
@@ -68,7 +68,8 @@ namespace Charly.Graph
             //Are we in the destiny node
             if (actualNodeToExplore == finalNode)
             {
-                //Break point for recursivity at this level
+
+                //Break point for recursivity at this level Rutas nodo final
                 return;
             }
             else
@@ -117,12 +118,12 @@ namespace Charly.Graph
             {
                 for (int z = 0; z < sizeZ; z++)
                 {
-                    Vector3 nodePosition = startPosition + new Vector3(x * cellSize, 0, z * cellSize);                  
+                    Vector3 nodePosition = startPosition + new Vector3(x * cellSize, .5f, z * cellSize);                  
                     GameObject nodesInstance =  Instantiate(prefabNodeTest, nodePosition, Quaternion.identity);
                     nodesInstance.name = $"Node {x} {z}";
                     nodesInstance.GetComponent<Node>().ValidNode();
                     nodesInstance.transform.SetParent(this.transform);
-                    if (nodesInstance.GetComponent<Node>().isNodeInstanciable) {
+                    if (nodesInstance.GetComponent<Node>().isNodeConnectable) {
                     graph.Add(nodesInstance.GetComponent<Node>());
                     }
                     nodesContainer.Add(nodesInstance.GetComponent<Node>());
@@ -133,9 +134,9 @@ namespace Charly.Graph
         public void ConnectionNodes()
         {
   
-            foreach (Node node in graph) {
-                node.RayCastForAllNodes(); 
-               
+            foreach (Node node in graph) 
+            {
+                node.RayCastAndDistanceForAllNodes(); 
             }
 
         }
@@ -148,6 +149,7 @@ namespace Charly.Graph
             }
             graph.Clear();
             nodesContainer.Clear();
+            allRoutes.Clear();
         }
         #endregion
 
@@ -155,24 +157,22 @@ namespace Charly.Graph
 
         private void OnDrawGizmos()
         {
-            //Gizmos.color = Color.blue;
+            Gizmos.color = Color.blue;
 
-            //Vector3 startPosition = transform.position -    
-            //                        new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);
+            Vector3 startPosition = transform.position -
+                                    new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);
 
-            //for (int x = 0; x < sizeX; x++)
-            //{
-            //    Vector3 start = startPosition + new Vector3(x * cellSize, 0, 0);
-            //    Vector3 end = start + new Vector3(0, 0, sizeZ * cellSize);
-            //    Gizmos.DrawLine(start, end);
-            //}
+            for (int x = 0; x < sizeX; x++) {
+                Vector3 start = startPosition + new Vector3(x * cellSize, 0, 0);
+                Vector3 end = start + new Vector3(0, 0, sizeZ * cellSize);
+                Gizmos.DrawLine(start, end);
+            }
 
-            //for (int z = 0; z < sizeZ; z++)
-            //{
-            //    Vector3 start = startPosition + new Vector3(0, 0, z * cellSize);
-            //    Vector3 end = start + new Vector3(sizeX * cellSize + 1, 0, 0);
-            //    Gizmos.DrawLine(start, end);
-            //}
+            for (int z = 0; z < sizeZ; z++) {
+                Vector3 start = startPosition + new Vector3(0, 0, z * cellSize);
+                Vector3 end = start + new Vector3(sizeX * cellSize + 1, 0, 0);
+                Gizmos.DrawLine(start, end);
+            }
         }
 
         #endregion

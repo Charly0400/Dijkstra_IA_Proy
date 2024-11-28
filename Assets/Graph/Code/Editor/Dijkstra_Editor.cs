@@ -34,7 +34,7 @@ namespace Charly.Graph
             }
             if (GUILayout.Button("3) Calculate all routes (and the best route to destiny"))
             {
-
+                _dijkstra.CalculateAllRoutes();
             }
             if (GUILayout.Button("Calculate All Dijkstra steps"))
             {
