@@ -39,6 +39,8 @@ namespace Charly.Graph
 
         protected Route initialRoute;
         [SerializeField] protected List<Route> allRoutes;
+        [SerializeField] protected List<Route> allValidRoutes;
+        [SerializeField] protected List<Route> TheRoute;
             //succesfullRoutes
             //truncatedRoutes
             //failledRoutes
@@ -68,8 +70,8 @@ namespace Charly.Graph
             //Are we in the destiny node
             if (actualNodeToExplore == finalNode)
             {
-
-                //Break point for recursivity at this level Rutas nodo final
+                allValidRoutes.Add(previousRoute);
+                //Break point for recursivity at this level
                 return;
             }
             else
@@ -150,7 +152,23 @@ namespace Charly.Graph
             graph.Clear();
             nodesContainer.Clear();
             allRoutes.Clear();
+            allValidRoutes.Clear();
+            TheRoute.Clear();
         }
+
+        public void TheRealRoute()
+        {
+            (float distance, int idx) lowestCost = (float.MaxValue, -1);
+
+            for (int i = 0; i < allValidRoutes.Count; i++)
+            {
+                if(allValidRoutes[i].sumDistance < lowestCost.distance)
+                {
+                    lowestCost = (allValidRoutes[i].sumDistance, i);
+                }
+            }
+        }
+
         #endregion
 
         #region UnityMethods

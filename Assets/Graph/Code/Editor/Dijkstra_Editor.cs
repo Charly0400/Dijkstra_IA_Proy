@@ -32,13 +32,13 @@ namespace Charly.Graph
             {
                 _dijkstra.ConnectionNodes();
             }
-            if (GUILayout.Button("3) Calculate all routes (and the best route to destiny"))
+            if (GUILayout.Button("3) Calculate all routes"))
             {
                 _dijkstra.CalculateAllRoutes();
             }
-            if (GUILayout.Button("Calculate All Dijkstra steps"))
+            if (GUILayout.Button("4) Calculate Best Route"))
             {
-
+                _dijkstra.TheRealRoute();
             }
             if (GUILayout.Button("Clean all previuos calculations"))
             {

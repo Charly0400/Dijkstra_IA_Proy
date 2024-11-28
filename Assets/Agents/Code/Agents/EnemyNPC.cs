@@ -129,7 +129,7 @@ namespace SotomaYorch.FiniteStateMachine.Agents
 
             //Start the SUB STATE MACHINE (Patrol Script)
             currentPatrolScript = soPatrolScript.patrolScript[0];
-            if (soPatrolScript.patrolScript.Length <= 0)
+            if (soPatrolScript.patrolScript.Count <= 0)
             {
                 //The Level Designer didn't assign any patrols
                 //to the enemy
@@ -169,9 +169,10 @@ namespace SotomaYorch.FiniteStateMachine.Agents
             //add one to the index, to jump to the next
             //element of the script
             currentPatrolIndex++;
-            if (currentPatrolIndex >= soPatrolScript.patrolScript.Length)
+            if (currentPatrolIndex >= soPatrolScript.patrolScript.Count)
             {
-                currentPatrolIndex = 0;
+                //currentPatrolIndex = 0;
+                return;
             }
             currentPatrolScript = soPatrolScript.patrolScript[currentPatrolIndex];
             Invoke("StartStateMechanic", 0.5f);
