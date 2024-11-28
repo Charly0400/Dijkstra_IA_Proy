@@ -79,7 +79,7 @@ namespace Charly.Graph
                 {
                     Node nextNode = connectionOfTheActualNode.RetreiveOtherNodeThan(actualNodeToExplore);
 
-                    if (!previousRoute.ContainsNodeInRoute(nextNode))
+                    if (!previousRoute.ContainsNodeInRoute(nextNode)) 
                     {
                         //1) Furthe exploration in a branch of the tree
                         //Invocation to itself
