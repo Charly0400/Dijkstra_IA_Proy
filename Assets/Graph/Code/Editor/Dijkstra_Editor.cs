@@ -38,7 +38,11 @@ namespace Charly.Graph
             }
             if (GUILayout.Button("4) Calculate Best Route"))
             {
-                _dijkstra.TheRealRoute();
+                _dijkstra.OptimizeRoute();
+            }
+            if (GUILayout.Button("5) Set Movement to Agent"))
+            {
+                _dijkstra.SetMovementOnSO();
             }
             if (GUILayout.Button("Clean all previuos calculations"))
             {

@@ -74,14 +74,21 @@ namespace Charly.Graph
                     if (hit.collider.gameObject.CompareTag("Node") &&
                         hit.transform.gameObject.GetComponent<Node>().isNodeConnectable == true) 
                     {
-                        Connection newConecction = new Connection();  
-                        connections.Add(newConecction);
-                        newConecction.nodeA = this;
-                        newConecction.nodeB = hit.transform.gameObject.GetComponent<Node>();
-                        newConecction.ditanceBetweenNodes =
-                            Vector3.Distance(this.transform.position, hit.transform.position);
+                        RaycastHit confirmHit;
+                        if (Physics.Raycast(hit.transform.position, this.transform.position - hit.transform.position, out confirmHit, 100))
+                        {
+                            if (confirmHit.transform.gameObject.CompareTag("Node"))
+                            {
+                                Connection newConecction = new Connection();
+                                connections.Add(newConecction);
+                                newConecction.nodeA = this;
+                                newConecction.nodeB = hit.transform.gameObject.GetComponent<Node>();
+                                newConecction.ditanceBetweenNodes =
+                                    Vector3.Distance(this.transform.position, hit.transform.position);
+                            }
+                        }
                     }
-                }
+                } 
             }
         }
 
@@ -99,10 +106,6 @@ namespace Charly.Graph
             }
 
         }
-
-        #endregion
-
-        #region privateMethods
 
         #endregion
 

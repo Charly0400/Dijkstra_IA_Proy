@@ -1,3 +1,5 @@
+using SotomaYorch.FiniteStateMachine;
+using SotomaYorch.FiniteStateMachine.Agents;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -8,6 +10,8 @@ namespace Charly.Graph
 {
     public class Dijkstra : MonoBehaviour
     {
+        [SerializeField] EnemyInteractiveScript_ScriptableObject enemyInteractiveScript;      
+
         #region RuntimeVariables
 
         [SerializeField] protected int sizeX = 10;
@@ -31,7 +35,6 @@ namespace Charly.Graph
         //defines the graph 
         [SerializeField] protected List<Node> graph;
         [SerializeField] protected List<Node> nodesContainer;
-        
 
         #endregion
 
@@ -40,7 +43,7 @@ namespace Charly.Graph
         protected Route initialRoute;
         [SerializeField] protected List<Route> allRoutes;
         [SerializeField] protected List<Route> allValidRoutes;
-        [SerializeField] protected List<Route> TheRoute;
+        [SerializeField] protected List<Route> theRoute;
             //succesfullRoutes
             //truncatedRoutes
             //failledRoutes
@@ -120,7 +123,7 @@ namespace Charly.Graph
             {
                 for (int z = 0; z < sizeZ; z++)
                 {
-                    Vector3 nodePosition = startPosition + new Vector3(x * cellSize, .5f, z * cellSize);                  
+                    Vector3 nodePosition = startPosition + new Vector3(x * cellSize, 1f, z * cellSize);                  
                     GameObject nodesInstance =  Instantiate(prefabNodeTest, nodePosition, Quaternion.identity);
                     nodesInstance.name = $"Node {x} {z}";
                     nodesInstance.GetComponent<Node>().ValidNode();
@@ -153,19 +156,37 @@ namespace Charly.Graph
             nodesContainer.Clear();
             allRoutes.Clear();
             allValidRoutes.Clear();
-            TheRoute.Clear();
+            theRoute.Clear();
+            enemyInteractiveScript.patrolScript.Clear();
         }
 
-        public void TheRealRoute()
+        public void OptimizeRoute()
         {
-            (float distance, int idx) lowestCost = (float.MaxValue, -1);
+            Route TheRealRoute = new Route();
+            float theShortestRoute = float.MaxValue;
 
-            for (int i = 0; i < allValidRoutes.Count; i++)
+            foreach (Route route in allValidRoutes)
             {
-                if(allValidRoutes[i].sumDistance < lowestCost.distance)
+                if (route.sumDistance < theShortestRoute)
                 {
-                    lowestCost = (allValidRoutes[i].sumDistance, i);
+                    theShortestRoute = route.sumDistance;
+                    TheRealRoute = route;
+                    theRoute.Clear ();
+                    theRoute.Add(TheRealRoute);
                 }
+            }
+        }
+
+        public void SetMovementOnSO()
+        {
+            Route selectedRoute = theRoute[0];
+            foreach (Node node in selectedRoute.nodes)
+            {
+                PatrolScript patrolScript = new PatrolScript();
+                patrolScript.actionToExecute = Actions.WALK;
+                patrolScript.speedOrTime = 5f;
+                patrolScript.destinyVector = node.transform.position;
+                enemyInteractiveScript.patrolScript.Add(patrolScript);
             }
         }
 
