@@ -196,7 +196,7 @@ namespace Charly.Graph
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
+            Gizmos.color = Color.yellow;
 
             Vector3 startPosition = transform.position -
                                     new Vector3(sizeX * cellSize, 0, sizeZ * cellSize);

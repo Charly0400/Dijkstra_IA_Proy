@@ -44,17 +44,19 @@ namespace Charly.Graph
         private void OnDrawGizmos()
         {
             if (connections == null)
+            {
                 return;
+            }
             foreach (Connection connection in connections)
             {
                 if (connection.nodeA == null || connection.nodeB == null)
+                {
                     return;
+                }
                 Debug.DrawLine(
                         connection.nodeA.transform.position,
                         connection.nodeB.transform.position,
-                        Color.gray,
-                        0.01666666f
-                    );
+                        Color.green, 0.01666666f);
             }
         }
 
