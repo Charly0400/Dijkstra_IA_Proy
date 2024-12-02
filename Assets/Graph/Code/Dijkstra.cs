@@ -27,8 +27,8 @@ namespace Charly.Graph
         //both will be obtained by calculating the leeser distance between:
         //Avatar VS all nodes
         //Goal VS all nodes
-        [SerializeField] protected Node initialNode;
-        [SerializeField] protected Node finalNode;
+        [SerializeField] protected GameObject initialPosition;
+        [SerializeField] protected GameObject finalPosition;
 
         //The collection of all the nodes
         //Wich every node contains multiple connection
@@ -44,9 +44,12 @@ namespace Charly.Graph
         [SerializeField] protected List<Route> allRoutes;
         [SerializeField] protected List<Route> allValidRoutes;
         [SerializeField] protected List<Route> theRoute;
-            //succesfullRoutes
-            //truncatedRoutes
-            //failledRoutes
+        //succesfullRoutes
+        //truncatedRoutes
+        //failledRoutes
+
+        [SerializeField] protected Node initialNode;
+        [SerializeField] protected Node finalNode;
 
         #endregion
 
@@ -134,6 +137,28 @@ namespace Charly.Graph
                     nodesContainer.Add(nodesInstance.GetComponent<Node>());
                 }
             }
+
+            GameObject goNode = Instantiate(prefabNodeTest, initialPosition.transform.position, Quaternion.identity);
+            goNode.name = $"Node Initial";
+            initialNode = goNode.GetComponent<Node>();
+            initialNode.ValidNode();
+            goNode.transform.SetParent(this.transform);
+            if (initialNode.isNodeConnectable)
+            {
+                graph.Add(initialNode);
+            }
+            nodesContainer.Add(initialNode);
+
+            goNode = Instantiate(prefabNodeTest, finalPosition.transform.position, Quaternion.identity);
+            goNode.name = $"Node Final";
+            finalNode = goNode.GetComponent<Node>();
+            finalNode.ValidNode();
+            goNode.transform.SetParent(this.transform);
+            if (finalNode.isNodeConnectable)
+            {
+                graph.Add(finalNode);
+            }
+            nodesContainer.Add(finalNode);
         }
 
         public void ConnectionNodes()
